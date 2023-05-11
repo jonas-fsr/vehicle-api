@@ -40,21 +40,11 @@ export class AppComponent {
       })
   }
 
-  toggleHeating() {
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
-    this.http.post('https://t4fayka7ivuinumk3lub4u5npa0tmthn.lambda-url.eu-central-1.on.aws/',
-      `Vehicle.Cabin.HVAC.IsAirConditioningActive=${!this.isHeatingActive}`,
-      {headers, observe: 'response'}
-    ).subscribe(response => {
-      console.log('toggle heating request returned: ' + response.status)
-      this.getHeatingStatus()
-    })
-  }
-
   getDoorStatus() {
     this.http.get('https://t4fayka7ivuinumk3lub4u5npa0tmthn.lambda-url.eu-central-1.on.aws/')
       .subscribe(async (data: any) => {
         let doorObject = await data;
+        console.log(doorObject)
         this.isDoorLocked = JSON.parse(doorObject.Vehicle.Cabin.Door.Row1.Left.IsLocked)
         this.isDoorOpen = JSON.parse(doorObject.Vehicle.Cabin.Door.Row1.Left.IsOpen)
       })
@@ -71,6 +61,26 @@ export class AppComponent {
       })
   }
 
+  toggleHeating() {
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    this.http.post('https://t4fayka7ivuinumk3lub4u5npa0tmthn.lambda-url.eu-central-1.on.aws/',
+      `Vehicle.Cabin.HVAC.IsAirConditioningActive=${!this.isHeatingActive}`,
+      {headers, observe: 'response'}
+    ).subscribe(response => {
+      console.log('toggle heating request returned: ' + response.status)
+    })
+  }
+
+  toggleDoorLock() {
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    this.http.post('https://t4fayka7ivuinumk3lub4u5npa0tmthn.lambda-url.eu-central-1.on.aws/',
+      `Vehicle.Cabin.Door.Row1.Left.IsLocked=${!this.isDoorLocked}`,
+      {headers, observe: 'response'}
+    ).subscribe(response => {
+      console.log('toggle door-lock request returned: ' + response.status)
+    })
+  }
+
   toggleCharging() {
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     console.log('Vehicle.Battery.Charging.StartStopCharging='.concat(this.startStopCharging == "START" ? "STOP" : "START"))
@@ -78,9 +88,9 @@ export class AppComponent {
       'Vehicle.Battery.Charging.StartStopCharging='.concat(this.startStopCharging == 'START' ? 'STOP' : 'START'),
       {headers, observe: 'response'}).subscribe(response => {
       console.log('toggle charging request returned: ' + response.status)
-      this.getBatteryStatus()
     })
   }
+
 
 
 }

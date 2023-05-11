@@ -19,6 +19,7 @@
           The Door is currently  <span class="highlight">{{isDoorLocked ? "LOCKED" : "UNLOCKED"}}</span>
           and  <span class="highlight">{{isDoorOpen ? "OPEN" : "CLOSED" }}</span>
         </p>
+        <button id="toggleDoorLock" (click)="toggleDoorLock()" [disabled]="isDoorOpen" [ngClass]="{'disabled': isDoorOpen}">Click to {{isDoorLocked ? "UNLOCK" : "LOCK"}} the door</button>
       </div>
       <div class="status-tile">
         <h3>Charging</h3>
